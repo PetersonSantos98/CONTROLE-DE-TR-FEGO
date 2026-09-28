@@ -658,7 +658,7 @@ def mostrar_bloco(
 st.markdown(
     """
 <div class="titulo-principal">
-CONTROLE DE TRÁFEGO - USINA IRACEMA
+CONTROLE DE MANUTENÇÃO - USINA IRACEMA
 </div>
 
 <div class="linha-azul"></div>
