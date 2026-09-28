@@ -29,7 +29,9 @@ FUSO_BR = ZoneInfo("America/Sao_Paulo")
 st.markdown("""
 <style>
 
-/* ESCONDER ELEMENTOS STREAMLIT */
+/* ============================================================
+   ESCONDER ELEMENTOS DO STREAMLIT
+   ============================================================ */
 
 [data-testid="stSidebar"] {
     display: none !important;
@@ -53,7 +55,9 @@ header {
 }
 
 
-/* PÁGINA */
+/* ============================================================
+   PÁGINA
+   ============================================================ */
 
 .stApp {
     background: white;
@@ -64,6 +68,7 @@ header {
     padding-bottom: 5px !important;
     padding-left: 5px !important;
     padding-right: 5px !important;
+
     max-width: 100% !important;
 }
 
@@ -78,7 +83,7 @@ div[data-testid="stHorizontalBlock"] {
 
 
 /* ============================================================
-   CABEÇALHO
+   CABEÇALHO PRINCIPAL
    ============================================================ */
 
 .cabecalho {
@@ -93,9 +98,11 @@ div[data-testid="stHorizontalBlock"] {
 
     background: white;
 
-    border-bottom: 7px solid #17365D;
+    border-bottom: 5px solid #17365D;
 
-    margin-bottom: 7px;
+    margin-bottom: 12px;
+
+    box-sizing: border-box;
 }
 
 .cabecalho-icone {
@@ -103,6 +110,9 @@ div[data-testid="stHorizontalBlock"] {
     left: 8px;
 
     font-size: 28px;
+
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .cabecalho-titulo {
@@ -120,6 +130,9 @@ div[data-testid="stHorizontalBlock"] {
     position: absolute;
     right: 12px;
 
+    top: 50%;
+    transform: translateY(-50%);
+
     font-family: Arial, sans-serif;
 
     color: #17365D;
@@ -130,15 +143,23 @@ div[data-testid="stHorizontalBlock"] {
 
 
 /* ============================================================
-   SETORES
+   BLOCO DO SETOR
    ============================================================ */
 
 .setor {
     width: 100%;
 
-    margin: 0 0 8px 0;
+    margin: 0 0 10px 0;
+
     padding: 0;
+
+    box-sizing: border-box;
 }
+
+
+/* ============================================================
+   TÍTULO DO SETOR
+   ============================================================ */
 
 .titulo-setor {
     width: 100%;
@@ -152,10 +173,13 @@ div[data-testid="stHorizontalBlock"] {
 
     text-align: center;
 
-    line-height: 19px;
+    line-height: 22px;
 
-    padding: 0;
-    margin: 0 0 1px 0;
+    padding: 2px 0 4px 0;
+
+    margin: 0;
+
+    box-sizing: border-box;
 }
 
 
@@ -173,10 +197,14 @@ div[data-testid="stHorizontalBlock"] {
     font-family: Arial, sans-serif;
 
     margin: 0;
+
+    padding: 0;
 }
 
 
-/* CABEÇALHO */
+/* ============================================================
+   CABEÇALHO DA TABELA
+   ============================================================ */
 
 .tabela th {
     background: #17365D;
@@ -198,7 +226,9 @@ div[data-testid="stHorizontalBlock"] {
 }
 
 
-/* CÉLULAS */
+/* ============================================================
+   CÉLULAS
+   ============================================================ */
 
 .tabela td {
     background: white;
@@ -228,31 +258,38 @@ div[data-testid="stHorizontalBlock"] {
 
 .frota {
     width: 11%;
+
     text-align: center !important;
 }
 
 .motivo {
     width: 39%;
+
     text-align: left !important;
 }
 
 .inicio {
     width: 17%;
+
     text-align: center !important;
 }
 
 .duracao {
     width: 13%;
+
     text-align: center !important;
 }
 
 .atividade {
     width: 20%;
+
     text-align: center !important;
 }
 
 
-/* ATIVIDADE CINZA */
+/* ============================================================
+   COLUNA ATIVIDADE
+   ============================================================ */
 
 .tabela td.atividade {
     background: #A6A6A6;
@@ -263,17 +300,22 @@ div[data-testid="stHorizontalBlock"] {
 }
 
 
-/* OUTROS */
+/* ============================================================
+   OUTROS / NÃO CLASSIFICADOS
+   ============================================================ */
 
 .separador {
     border-top: 2px solid #17365D;
 
-    margin-top: 8px;
+    margin-top: 10px;
+
     margin-bottom: 5px;
 }
 
 
-/* RODAPÉ */
+/* ============================================================
+   RODAPÉ
+   ============================================================ */
 
 .rodape {
     margin-top: 5px;
@@ -403,7 +445,7 @@ def limpar_numero(valor):
 
 
 # ============================================================
-# NORMALIZAÇÃO
+# NORMALIZAR TEXTO
 # ============================================================
 
 def normalizar_texto(valor):
@@ -439,7 +481,7 @@ def sem_acento(valor):
 
 
 # ============================================================
-# DATAS
+# CONVERTER DATA/HORA
 # ============================================================
 
 def converter_inicio(valor):
@@ -467,6 +509,10 @@ def converter_inicio(valor):
         return pd.NaT
 
 
+# ============================================================
+# FORMATAR INÍCIO
+# ============================================================
+
 def formatar_inicio(data):
 
     if pd.isna(data):
@@ -478,7 +524,7 @@ def formatar_inicio(data):
 
 
 # ============================================================
-# DURAÇÃO
+# CALCULAR DURAÇÃO
 # ============================================================
 
 def calcular_duracao(inicio):
@@ -502,6 +548,7 @@ def calcular_duracao(inicio):
     minutos_totais = segundos // 60
 
     horas = minutos_totais // 60
+
     minutos = minutos_totais % 60
 
     return f"{horas:02d}:{minutos:02d}"
@@ -516,10 +563,18 @@ def identificar_setor(frente):
     texto = sem_acento(frente)
 
 
+    # --------------------------------------------------------
+    # PLANTIO
+    # --------------------------------------------------------
+
     if "PLANTIO" in texto:
 
         return "PLANTIO"
 
+
+    # --------------------------------------------------------
+    # CONSERVAÇÃO
+    # --------------------------------------------------------
 
     if (
         "CONSERV" in texto
@@ -529,6 +584,10 @@ def identificar_setor(frente):
         return "CONSERVAÇÃO"
 
 
+    # --------------------------------------------------------
+    # PREPARO DE SOLO
+    # --------------------------------------------------------
+
     if (
         "PREPARO" in texto
         and "SOLO" in texto
@@ -536,6 +595,10 @@ def identificar_setor(frente):
 
         return "PREPARO DE SOLO"
 
+
+    # --------------------------------------------------------
+    # TORTA DE FILTRO
+    # --------------------------------------------------------
 
     if (
         "TORTA" in texto
@@ -545,15 +608,27 @@ def identificar_setor(frente):
         return "TORTA DE FILTRO"
 
 
+    # --------------------------------------------------------
+    # HERBICIDA
+    # --------------------------------------------------------
+
     if "HERBICIDA" in texto:
 
         return "HERBICIDA"
 
 
+    # --------------------------------------------------------
+    # CULTIVO
+    # --------------------------------------------------------
+
     if "CULTIVO" in texto:
 
         return "CULTIVO"
 
+
+    # --------------------------------------------------------
+    # FERTIRRIGAÇÃO
+    # --------------------------------------------------------
 
     if (
         "FERTIRRIGA" in texto
@@ -563,10 +638,18 @@ def identificar_setor(frente):
         return "FERTIRRIGAÇÃO"
 
 
+    # --------------------------------------------------------
+    # INCÊNDIO
+    # --------------------------------------------------------
+
     if "INCENDIO" in texto:
 
         return "INCÊNDIO"
 
+
+    # --------------------------------------------------------
+    # SERVIÇOS AGRÍCOLAS
+    # --------------------------------------------------------
 
     if (
         "SERVI" in texto
@@ -595,9 +678,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # GARANTIR COLUNAS
-    # --------------------------------------------------------
+    # ========================================================
 
     colunas = [
         "tipo_equipamento",
@@ -620,9 +703,9 @@ def preparar_dataframe(dados):
             df[coluna] = None
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # BASE
-    # --------------------------------------------------------
+    # ========================================================
 
     df["base"] = pd.to_numeric(
         df["base"],
@@ -635,9 +718,9 @@ def preparar_dataframe(dados):
     ].copy()
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # FROTA
-    # --------------------------------------------------------
+    # ========================================================
 
     df["frota"] = (
         df["frota"]
@@ -645,9 +728,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # MOTIVO
-    # --------------------------------------------------------
+    # ========================================================
 
     df["motivo"] = (
         df["motivo"]
@@ -657,9 +740,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # FRENTE
-    # --------------------------------------------------------
+    # ========================================================
 
     df["frente"] = (
         df["frente"]
@@ -669,9 +752,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # INÍCIO
-    # --------------------------------------------------------
+    # ========================================================
 
     df["inicio_dt"] = (
         df["inicio"]
@@ -685,9 +768,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # DURAÇÃO
-    # --------------------------------------------------------
+    # ========================================================
 
     df["DURAÇÃO"] = (
         df["inicio_dt"]
@@ -695,9 +778,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # SETOR
-    # --------------------------------------------------------
+    # ========================================================
 
     df["SETOR"] = (
         df["frente"]
@@ -705,16 +788,16 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # ATIVIDADE
-    # --------------------------------------------------------
+    # ========================================================
 
     df["ATIVIDADE"] = "-"
 
 
-    # --------------------------------------------------------
-    # ORDENAÇÃO
-    # --------------------------------------------------------
+    # ========================================================
+    # ORDENAR
+    # ========================================================
 
     df = df.sort_values(
         [
@@ -771,9 +854,7 @@ def escapar(valor):
 
 
 # ============================================================
-# GERAR TABELA
-# IMPORTANTE:
-# HTML SEM QUEBRAS/INDENTAÇÃO PROBLEMÁTICAS
+# CRIAR TABELA HTML
 # ============================================================
 
 def criar_tabela_html(dataframe):
@@ -781,9 +862,9 @@ def criar_tabela_html(dataframe):
     linhas = ""
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # SEM REGISTROS
-    # --------------------------------------------------------
+    # ========================================================
 
     if dataframe.empty:
 
@@ -798,9 +879,9 @@ def criar_tabela_html(dataframe):
         )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # COM REGISTROS
-    # --------------------------------------------------------
+    # ========================================================
 
     else:
 
@@ -813,12 +894,14 @@ def criar_tabela_html(dataframe):
                 )
             )
 
+
             motivo = escapar(
                 linha.get(
                     "motivo",
                     "-"
                 )
             )
+
 
             inicio = escapar(
                 linha.get(
@@ -827,12 +910,14 @@ def criar_tabela_html(dataframe):
                 )
             )
 
+
             duracao = escapar(
                 linha.get(
                     "DURAÇÃO",
                     "-"
                 )
             )
+
 
             atividade = escapar(
                 linha.get(
@@ -884,12 +969,12 @@ def mostrar_setor(nome, dataframe):
         nome
     )
 
+
     tabela = criar_tabela_html(
         dataframe
     )
 
 
-    # Tudo enviado ao Streamlit em UMA string HTML.
     bloco = (
         "<div class='setor'>"
         f"<div class='titulo-setor'>{nome_html}</div>"
@@ -910,13 +995,14 @@ def mostrar_setor(nome, dataframe):
 
 dados = buscar_manutencoes()
 
+
 df = preparar_dataframe(
     dados
 )
 
 
 # ============================================================
-# RELÓGIO
+# HORÁRIO ATUAL
 # ============================================================
 
 agora = datetime.now(
@@ -925,7 +1011,7 @@ agora = datetime.now(
 
 
 # ============================================================
-# CABEÇALHO
+# CABEÇALHO PRINCIPAL
 # ============================================================
 
 cabecalho = (
@@ -948,7 +1034,7 @@ st.markdown(
 
 
 # ============================================================
-# FUNÇÃO PARA PEGAR SETOR
+# PEGAR SETOR
 # ============================================================
 
 def pegar_setor(nome):
@@ -964,44 +1050,53 @@ def pegar_setor(nome):
 
 
 # ============================================================
-# DATAFRAMES
+# DATAFRAMES POR SETOR
 # ============================================================
 
 plantio = pegar_setor(
     "PLANTIO"
 )
 
+
 conservacao = pegar_setor(
     "CONSERVAÇÃO"
 )
+
 
 preparo_solo = pegar_setor(
     "PREPARO DE SOLO"
 )
 
+
 torta_filtro = pegar_setor(
     "TORTA DE FILTRO"
 )
+
 
 herbicida = pegar_setor(
     "HERBICIDA"
 )
 
+
 cultivo = pegar_setor(
     "CULTIVO"
 )
+
 
 fertirrigacao = pegar_setor(
     "FERTIRRIGAÇÃO"
 )
 
+
 incendio = pegar_setor(
     "INCÊNDIO"
 )
 
+
 servicos_agricolas = pegar_setor(
     "SERVIÇOS AGRÍCOLAS"
 )
+
 
 outros = pegar_setor(
     "OUTROS"
@@ -1009,7 +1104,7 @@ outros = pegar_setor(
 
 
 # ============================================================
-# 3 COLUNAS
+# LAYOUT PRINCIPAL
 # ============================================================
 
 col1, col2, col3 = st.columns(
@@ -1019,7 +1114,7 @@ col1, col2, col3 = st.columns(
 
 
 # ============================================================
-# COLUNA 1
+# COLUNA ESQUERDA
 # ============================================================
 
 with col1:
@@ -1029,15 +1124,18 @@ with col1:
         plantio
     )
 
+
     mostrar_setor(
         "CONSERVAÇÃO",
         conservacao
     )
 
+
     mostrar_setor(
         "PREPARO DE SOLO",
         preparo_solo
     )
+
 
     mostrar_setor(
         "TORTA DE FILTRO",
@@ -1046,7 +1144,7 @@ with col1:
 
 
 # ============================================================
-# COLUNA 2
+# COLUNA CENTRAL
 # ============================================================
 
 with col2:
@@ -1056,10 +1154,12 @@ with col2:
         herbicida
     )
 
+
     mostrar_setor(
         "CULTIVO",
         cultivo
     )
+
 
     mostrar_setor(
         "FERTIRRIGAÇÃO",
@@ -1068,7 +1168,7 @@ with col2:
 
 
 # ============================================================
-# COLUNA 3
+# COLUNA DIREITA
 # ============================================================
 
 with col3:
@@ -1078,6 +1178,7 @@ with col3:
         incendio
     )
 
+
     mostrar_setor(
         "SERVIÇOS AGRÍCOLAS",
         servicos_agricolas
@@ -1085,7 +1186,7 @@ with col3:
 
 
 # ============================================================
-# OUTROS
+# OUTROS / NÃO CLASSIFICADOS
 # ============================================================
 
 if not outros.empty:
