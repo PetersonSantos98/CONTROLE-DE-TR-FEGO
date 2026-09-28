@@ -9,7 +9,7 @@ from supabase import create_client
 
 
 # ============================================================
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÇÃO
 # ============================================================
 
 st.set_page_config(
@@ -23,352 +23,276 @@ FUSO_BR = ZoneInfo("America/Sao_Paulo")
 
 
 # ============================================================
-# CSS - LAYOUT PARA TV
+# CSS
 # ============================================================
 
-st.markdown(
-    """
-    <style>
+st.markdown("""
+<style>
 
-    /* =======================================================
-       ESCONDER ELEMENTOS DO STREAMLIT
-       ======================================================= */
+/* ESCONDER ELEMENTOS STREAMLIT */
 
-    [data-testid="stSidebar"] {
-        display: none !important;
-    }
+[data-testid="stSidebar"] {
+    display: none !important;
+}
 
-    [data-testid="collapsedControl"] {
-        display: none !important;
-    }
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
 
-    #MainMenu {
-        visibility: hidden !important;
-    }
+#MainMenu {
+    visibility: hidden !important;
+}
 
-    footer {
-        visibility: hidden !important;
-    }
+footer {
+    visibility: hidden !important;
+}
 
-    header {
-        visibility: hidden !important;
-        height: 0 !important;
-    }
+header {
+    visibility: hidden !important;
+    height: 0 !important;
+}
 
 
-    /* =======================================================
-       PÁGINA
-       ======================================================= */
+/* PÁGINA */
 
-    .stApp {
-        background-color: #FFFFFF;
-    }
+.stApp {
+    background: white;
+}
 
-    .block-container {
-        padding-top: 0.15rem !important;
-        padding-bottom: 0.3rem !important;
-        padding-left: 0.25rem !important;
-        padding-right: 0.25rem !important;
-        max-width: 100% !important;
-    }
+.block-container {
+    padding-top: 3px !important;
+    padding-bottom: 5px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    max-width: 100% !important;
+}
 
-    div[data-testid="stVerticalBlock"] {
-        gap: 0.08rem !important;
-    }
+div[data-testid="stVerticalBlock"] {
+    gap: 0.15rem !important;
+}
 
-    div[data-testid="stHorizontalBlock"] {
-        gap: 0.7rem !important;
-        align-items: flex-start !important;
-    }
+div[data-testid="stHorizontalBlock"] {
+    gap: 10px !important;
+    align-items: flex-start !important;
+}
 
 
-    /* =======================================================
-       CABEÇALHO PRINCIPAL
-       ======================================================= */
+/* ============================================================
+   CABEÇALHO
+   ============================================================ */
 
-    .cabecalho-principal {
-        width: 100%;
-        height: 43px;
+.cabecalho {
+    width: 100%;
+    height: 45px;
 
-        position: relative;
+    position: relative;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        background: #FFFFFF;
+    background: white;
 
-        border-bottom: 7px solid #17365D;
+    border-bottom: 7px solid #17365D;
 
-        margin: 0 0 7px 0;
-        padding: 0 5px;
+    margin-bottom: 7px;
+}
 
-        box-sizing: border-box;
-    }
+.cabecalho-icone {
+    position: absolute;
+    left: 8px;
 
-    .cabecalho-icone {
-        position: absolute;
+    font-size: 28px;
+}
 
-        left: 7px;
-        top: 4px;
+.cabecalho-titulo {
+    font-family: Arial, sans-serif;
 
-        font-size: 27px;
-        line-height: 32px;
-    }
+    color: #17365D;
 
-    .cabecalho-titulo {
-        color: #17365D;
+    font-size: 24px;
+    font-weight: 800;
 
-        font-family: Arial, sans-serif;
+    text-align: center;
+}
 
-        font-size: 25px;
-        font-weight: 800;
+.cabecalho-relogio {
+    position: absolute;
+    right: 12px;
 
-        text-align: center;
+    font-family: Arial, sans-serif;
 
-        line-height: 32px;
-    }
+    color: #17365D;
 
-    .cabecalho-relogio {
-        position: absolute;
+    font-size: 18px;
+    font-weight: bold;
+}
 
-        right: 12px;
-        top: 7px;
 
-        color: #17365D;
+/* ============================================================
+   SETORES
+   ============================================================ */
 
-        font-family: Arial, sans-serif;
+.setor {
+    width: 100%;
 
-        font-size: 17px;
-        font-weight: 800;
+    margin: 0 0 8px 0;
+    padding: 0;
+}
 
-        white-space: nowrap;
-    }
+.titulo-setor {
+    width: 100%;
 
+    font-family: Arial, sans-serif;
 
-    /* =======================================================
-       BLOCO DE CADA SETOR
-       ======================================================= */
+    color: #17365D;
 
-    .bloco-setor {
-        width: 100%;
+    font-size: 17px;
+    font-weight: 800;
 
-        margin: 0 0 7px 0;
-        padding: 0;
+    text-align: center;
 
-        box-sizing: border-box;
-    }
+    line-height: 19px;
 
-    .titulo-setor-tv {
-        width: 100%;
+    padding: 0;
+    margin: 0 0 1px 0;
+}
 
-        color: #17365D;
 
-        font-family: Arial, sans-serif;
+/* ============================================================
+   TABELA
+   ============================================================ */
 
-        font-size: 17px;
-        font-weight: 800;
+.tabela {
+    width: 100%;
 
-        text-align: center;
+    border-collapse: collapse;
 
-        line-height: 19px;
+    table-layout: fixed;
 
-        margin: 0;
-        padding: 1px 0 2px 0;
+    font-family: Arial, sans-serif;
 
-        box-sizing: border-box;
-    }
+    margin: 0;
+}
 
 
-    /* =======================================================
-       TABELAS
-       ======================================================= */
+/* CABEÇALHO */
 
-    .tabela-tv {
-        width: 100%;
+.tabela th {
+    background: #17365D;
 
-        border-collapse: collapse;
-        border-spacing: 0;
+    color: white;
 
-        table-layout: fixed;
+    border: 1px solid white;
 
-        font-family: Arial, sans-serif;
+    padding: 2px 3px;
 
-        margin: 0;
-        padding: 0;
-    }
+    font-size: 10px;
+    font-weight: bold;
 
-    .tabela-tv thead tr {
-        background-color: #17365D;
-    }
+    line-height: 12px;
 
-    .tabela-tv th {
-        background-color: #17365D;
-        color: #FFFFFF;
+    text-align: center;
 
-        border: 1px solid #FFFFFF;
+    white-space: nowrap;
+}
 
-        padding: 1px 3px;
 
-        height: 17px;
+/* CÉLULAS */
 
-        font-size: 10px;
-        font-weight: 700;
+.tabela td {
+    background: white;
 
-        line-height: 12px;
+    color: black;
 
-        text-align: center;
+    border: 1px solid #777;
 
-        white-space: nowrap;
+    padding: 2px 3px;
 
-        box-sizing: border-box;
-    }
+    font-size: 10px;
+    font-weight: 600;
 
-    .tabela-tv td {
-        color: #000000;
-        background-color: #FFFFFF;
+    line-height: 12px;
 
-        border: 1px solid #7F7F7F;
+    white-space: nowrap;
 
-        padding: 1px 3px;
+    overflow: hidden;
 
-        height: 18px;
+    text-overflow: ellipsis;
+}
 
-        font-size: 10px;
-        font-weight: 600;
 
-        line-height: 13px;
+/* ============================================================
+   LARGURA DAS COLUNAS
+   ============================================================ */
 
-        vertical-align: middle;
+.frota {
+    width: 11%;
+    text-align: center !important;
+}
 
-        box-sizing: border-box;
+.motivo {
+    width: 39%;
+    text-align: left !important;
+}
 
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+.inicio {
+    width: 17%;
+    text-align: center !important;
+}
 
+.duracao {
+    width: 13%;
+    text-align: center !important;
+}
 
-    /* =======================================================
-       LARGURAS
-       ======================================================= */
+.atividade {
+    width: 20%;
+    text-align: center !important;
+}
 
-    .col-frota {
-        width: 12%;
-        text-align: center !important;
-    }
 
-    .col-motivo {
-        width: 38%;
-        text-align: left !important;
-    }
+/* ATIVIDADE CINZA */
 
-    .col-inicio {
-        width: 17%;
-        text-align: center !important;
-    }
+.tabela td.atividade {
+    background: #A6A6A6;
 
-    .col-duracao {
-        width: 13%;
-        text-align: center !important;
-    }
+    font-size: 9px;
 
-    .col-atividade {
-        width: 20%;
-        text-align: center !important;
-    }
+    font-weight: bold;
+}
 
 
-    /* =======================================================
-       ATIVIDADE
-       ======================================================= */
+/* OUTROS */
 
-    td.col-atividade {
-        background-color: #A6A6A6;
-        color: #000000;
+.separador {
+    border-top: 2px solid #17365D;
 
-        font-size: 9px;
-        font-weight: 700;
-    }
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
 
 
-    /* =======================================================
-       SEM REGISTROS
-       ======================================================= */
+/* RODAPÉ */
 
-    .linha-vazia {
-        text-align: center !important;
-        color: #666666 !important;
-        font-weight: 400 !important;
-    }
+.rodape {
+    margin-top: 5px;
 
+    padding-top: 3px;
 
-    /* =======================================================
-       OUTROS
-       ======================================================= */
+    border-top: 1px solid #aaa;
 
-    .separador-outros {
-        width: 100%;
-        border-top: 2px solid #17365D;
+    text-align: right;
 
-        margin-top: 6px;
-        margin-bottom: 4px;
-    }
+    font-family: Arial, sans-serif;
 
+    font-size: 9px;
 
-    /* =======================================================
-       RODAPÉ
-       ======================================================= */
+    color: #666;
+}
 
-    .rodape-tv {
-        width: 100%;
-
-        border-top: 1px solid #AAAAAA;
-
-        margin-top: 6px;
-        padding-top: 3px;
-
-        font-family: Arial, sans-serif;
-
-        font-size: 9px;
-
-        color: #666666;
-
-        text-align: right;
-    }
-
-
-    /* =======================================================
-       TELAS GRANDES / TV
-       ======================================================= */
-
-    @media (min-width: 1600px) {
-
-        .cabecalho-titulo {
-            font-size: 28px;
-        }
-
-        .cabecalho-relogio {
-            font-size: 19px;
-        }
-
-        .titulo-setor-tv {
-            font-size: 18px;
-        }
-
-        .tabela-tv th {
-            font-size: 10px;
-        }
-
-        .tabela-tv td {
-            font-size: 10px;
-        }
-    }
-
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+</style>
+""", unsafe_allow_html=True)
 
 
 # ============================================================
@@ -382,11 +306,8 @@ try:
 
 except Exception:
 
-    st.error("Credenciais do Supabase não encontradas.")
-
-    st.info(
-        "Configure SUPABASE_URL e SUPABASE_KEY "
-        "nos Secrets do Streamlit."
+    st.error(
+        "SUPABASE_URL e SUPABASE_KEY não encontrados nos Secrets."
     )
 
     st.stop()
@@ -401,22 +322,11 @@ def conectar_supabase():
     )
 
 
-try:
-
-    supabase = conectar_supabase()
-
-except Exception as erro:
-
-    st.error(
-        f"Erro ao conectar ao Supabase: {erro}"
-    )
-
-    st.stop()
+supabase = conectar_supabase()
 
 
 # ============================================================
-# BUSCAR MANUTENÇÕES
-# BASE 3026 = DIVERSOS
+# CONSULTAR BANCO
 # ============================================================
 
 @st.cache_data(ttl=55)
@@ -451,14 +361,14 @@ def buscar_manutencoes():
     except Exception as erro:
 
         st.error(
-            f"Erro ao consultar o Supabase: {erro}"
+            f"Erro ao consultar Supabase: {erro}"
         )
 
         return []
 
 
 # ============================================================
-# LIMPAR NÚMERO
+# LIMPAR NÚMEROS
 # ============================================================
 
 def limpar_numero(valor):
@@ -476,7 +386,7 @@ def limpar_numero(valor):
 
     texto = str(valor).strip()
 
-    if texto == "":
+    if not texto:
         return ""
 
     try:
@@ -493,7 +403,7 @@ def limpar_numero(valor):
 
 
 # ============================================================
-# NORMALIZAR TEXTO
+# NORMALIZAÇÃO
 # ============================================================
 
 def normalizar_texto(valor):
@@ -509,16 +419,10 @@ def normalizar_texto(valor):
     except Exception:
         pass
 
-    texto = str(valor).strip().upper()
-
-    return texto
+    return str(valor).strip().upper()
 
 
-# ============================================================
-# NORMALIZAR TEXTO SEM ACENTOS
-# ============================================================
-
-def texto_sem_acento(valor):
+def sem_acento(valor):
 
     texto = normalizar_texto(valor)
 
@@ -527,17 +431,15 @@ def texto_sem_acento(valor):
         texto
     )
 
-    texto = "".join(
-        caractere
-        for caractere in texto
-        if not unicodedata.combining(caractere)
+    return "".join(
+        c
+        for c in texto
+        if not unicodedata.combining(c)
     )
-
-    return texto
 
 
 # ============================================================
-# CONVERTER DATA DO SUPABASE
+# DATAS
 # ============================================================
 
 def converter_inicio(valor):
@@ -565,10 +467,6 @@ def converter_inicio(valor):
         return pd.NaT
 
 
-# ============================================================
-# FORMATAR INÍCIO
-# ============================================================
-
 def formatar_inicio(data):
 
     if pd.isna(data):
@@ -580,7 +478,7 @@ def formatar_inicio(data):
 
 
 # ============================================================
-# CALCULAR DURAÇÃO
+# DURAÇÃO
 # ============================================================
 
 def calcular_duracao(inicio):
@@ -615,93 +513,66 @@ def calcular_duracao(inicio):
 
 def identificar_setor(frente):
 
-    texto = texto_sem_acento(frente)
+    texto = sem_acento(frente)
 
-
-    # ========================================================
-    # PLANTIO
-    # ========================================================
 
     if "PLANTIO" in texto:
+
         return "PLANTIO"
 
-
-    # ========================================================
-    # CONSERVAÇÃO
-    # ========================================================
 
     if (
         "CONSERV" in texto
         or "ESTRADA" in texto
     ):
+
         return "CONSERVAÇÃO"
 
-
-    # ========================================================
-    # PREPARO DE SOLO
-    # ========================================================
 
     if (
         "PREPARO" in texto
         and "SOLO" in texto
     ):
+
         return "PREPARO DE SOLO"
 
-
-    # ========================================================
-    # TORTA DE FILTRO
-    # ========================================================
 
     if (
         "TORTA" in texto
         and "FILTRO" in texto
     ):
+
         return "TORTA DE FILTRO"
 
 
-    # ========================================================
-    # HERBICIDA
-    # ========================================================
-
     if "HERBICIDA" in texto:
+
         return "HERBICIDA"
 
 
-    # ========================================================
-    # CULTIVO
-    # ========================================================
-
     if "CULTIVO" in texto:
+
         return "CULTIVO"
 
-
-    # ========================================================
-    # FERTIRRIGAÇÃO
-    # ========================================================
 
     if (
         "FERTIRRIGA" in texto
         or "IRRIGA" in texto
     ):
+
         return "FERTIRRIGAÇÃO"
 
 
-    # ========================================================
-    # INCÊNDIO
-    # ========================================================
-
     if "INCENDIO" in texto:
+
         return "INCÊNDIO"
 
-
-    # ========================================================
-    # SERVIÇOS AGRÍCOLAS
-    # ========================================================
 
     if (
         "SERVI" in texto
         and "AGRIC" in texto
     ):
+
         return "SERVIÇOS AGRÍCOLAS"
 
 
@@ -715,14 +586,18 @@ def identificar_setor(frente):
 def preparar_dataframe(dados):
 
     if not dados:
+
         return pd.DataFrame()
 
-    df = pd.DataFrame(dados)
+
+    df = pd.DataFrame(
+        dados
+    )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # GARANTIR COLUNAS
-    # ========================================================
+    # --------------------------------------------------------
 
     colunas = [
         "tipo_equipamento",
@@ -737,29 +612,32 @@ def preparar_dataframe(dados):
         "atualizado_em"
     ]
 
+
     for coluna in colunas:
 
         if coluna not in df.columns:
+
             df[coluna] = None
 
 
-    # ========================================================
-    # FILTRAR BASE
-    # ========================================================
+    # --------------------------------------------------------
+    # BASE
+    # --------------------------------------------------------
 
     df["base"] = pd.to_numeric(
         df["base"],
         errors="coerce"
     )
 
+
     df = df[
         df["base"] == 3026
     ].copy()
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # FROTA
-    # ========================================================
+    # --------------------------------------------------------
 
     df["frota"] = (
         df["frota"]
@@ -767,39 +645,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # ========================================================
-    # DATA/HORA
-    # ========================================================
-
-    df["inicio_dt"] = (
-        df["inicio"]
-        .apply(converter_inicio)
-    )
-
-
-    # ========================================================
-    # INÍCIO FORMATADO
-    # ========================================================
-
-    df["INÍCIO"] = (
-        df["inicio_dt"]
-        .apply(formatar_inicio)
-    )
-
-
-    # ========================================================
-    # DURAÇÃO
-    # ========================================================
-
-    df["DURAÇÃO"] = (
-        df["inicio_dt"]
-        .apply(calcular_duracao)
-    )
-
-
-    # ========================================================
+    # --------------------------------------------------------
     # MOTIVO
-    # ========================================================
+    # --------------------------------------------------------
 
     df["motivo"] = (
         df["motivo"]
@@ -809,9 +657,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # FRENTE
-    # ========================================================
+    # --------------------------------------------------------
 
     df["frente"] = (
         df["frente"]
@@ -821,21 +669,35 @@ def preparar_dataframe(dados):
     )
 
 
-    # ========================================================
-    # LOCAL
-    # ========================================================
+    # --------------------------------------------------------
+    # INÍCIO
+    # --------------------------------------------------------
 
-    df["local"] = (
-        df["local"]
-        .fillna("")
-        .astype(str)
-        .str.strip()
+    df["inicio_dt"] = (
+        df["inicio"]
+        .apply(converter_inicio)
     )
 
 
-    # ========================================================
+    df["INÍCIO"] = (
+        df["inicio_dt"]
+        .apply(formatar_inicio)
+    )
+
+
+    # --------------------------------------------------------
+    # DURAÇÃO
+    # --------------------------------------------------------
+
+    df["DURAÇÃO"] = (
+        df["inicio_dt"]
+        .apply(calcular_duracao)
+    )
+
+
+    # --------------------------------------------------------
     # SETOR
-    # ========================================================
+    # --------------------------------------------------------
 
     df["SETOR"] = (
         df["frente"]
@@ -843,22 +705,19 @@ def preparar_dataframe(dados):
     )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # ATIVIDADE
-    #
-    # Ainda não existe uma coluna de atividade no Supabase.
-    # Mantemos "-" até adicionarmos essa informação.
-    # ========================================================
+    # --------------------------------------------------------
 
     df["ATIVIDADE"] = "-"
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # ORDENAÇÃO
-    # ========================================================
+    # --------------------------------------------------------
 
     df = df.sort_values(
-        by=[
+        [
             "SETOR",
             "inicio_dt",
             "frota"
@@ -871,30 +730,39 @@ def preparar_dataframe(dados):
         na_position="last"
     )
 
+
     return df
 
 
 # ============================================================
-# ESCAPAR TEXTO PARA HTML
+# ESCAPAR HTML
 # ============================================================
 
 def escapar(valor):
 
     if valor is None:
+
         return "-"
+
 
     try:
 
         if pd.isna(valor):
+
             return "-"
 
     except Exception:
+
         pass
+
 
     texto = str(valor).strip()
 
-    if texto == "":
+
+    if not texto:
+
         texto = "-"
+
 
     return html.escape(
         texto,
@@ -903,166 +771,107 @@ def escapar(valor):
 
 
 # ============================================================
-# CRIAR HTML DA TABELA
+# GERAR TABELA
+# IMPORTANTE:
+# HTML SEM QUEBRAS/INDENTAÇÃO PROBLEMÁTICAS
 # ============================================================
 
 def criar_tabela_html(dataframe):
 
-    partes = []
-
-    partes.append(
-        """
-        <table class="tabela-tv">
-
-            <thead>
-
-                <tr>
-
-                    <th class="col-frota">
-                        FROTA
-                    </th>
-
-                    <th class="col-motivo">
-                        MOTIVO
-                    </th>
-
-                    <th class="col-inicio">
-                        INÍCIO
-                    </th>
-
-                    <th class="col-duracao">
-                        DURAÇÃO
-                    </th>
-
-                    <th class="col-atividade">
-                        ATIVIDADE
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-        """
-    )
+    linhas = ""
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # SEM REGISTROS
-    # ========================================================
+    # --------------------------------------------------------
 
     if dataframe.empty:
 
-        partes.append(
-            """
-            <tr>
-
-                <td class="col-frota linha-vazia">
-                    -
-                </td>
-
-                <td class="col-motivo linha-vazia">
-                    -
-                </td>
-
-                <td class="col-inicio linha-vazia">
-                    -
-                </td>
-
-                <td class="col-duracao linha-vazia">
-                    -
-                </td>
-
-                <td class="col-atividade linha-vazia">
-                    -
-                </td>
-
-            </tr>
-            """
+        linhas = (
+            "<tr>"
+            "<td class='frota'>-</td>"
+            "<td class='motivo'>-</td>"
+            "<td class='inicio'>-</td>"
+            "<td class='duracao'>-</td>"
+            "<td class='atividade'>-</td>"
+            "</tr>"
         )
 
 
-    # ========================================================
-    # REGISTROS
-    # ========================================================
+    # --------------------------------------------------------
+    # COM REGISTROS
+    # --------------------------------------------------------
 
     else:
 
         for _, linha in dataframe.iterrows():
 
             frota = escapar(
-                linha.get("frota", "-")
+                linha.get(
+                    "frota",
+                    "-"
+                )
             )
 
             motivo = escapar(
-                linha.get("motivo", "-")
+                linha.get(
+                    "motivo",
+                    "-"
+                )
             )
 
             inicio = escapar(
-                linha.get("INÍCIO", "-")
+                linha.get(
+                    "INÍCIO",
+                    "-"
+                )
             )
 
             duracao = escapar(
-                linha.get("DURAÇÃO", "-")
+                linha.get(
+                    "DURAÇÃO",
+                    "-"
+                )
             )
 
             atividade = escapar(
-                linha.get("ATIVIDADE", "-")
-            )
-
-            partes.append(
-                f"""
-                <tr>
-
-                    <td
-                        class="col-frota"
-                        title="{frota}"
-                    >
-                        {frota}
-                    </td>
-
-                    <td
-                        class="col-motivo"
-                        title="{motivo}"
-                    >
-                        {motivo}
-                    </td>
-
-                    <td
-                        class="col-inicio"
-                        title="{inicio}"
-                    >
-                        {inicio}
-                    </td>
-
-                    <td
-                        class="col-duracao"
-                        title="{duracao}"
-                    >
-                        {duracao}
-                    </td>
-
-                    <td
-                        class="col-atividade"
-                        title="{atividade}"
-                    >
-                        {atividade}
-                    </td>
-
-                </tr>
-                """
+                linha.get(
+                    "ATIVIDADE",
+                    "-"
+                )
             )
 
 
-    partes.append(
-        """
-            </tbody>
+            linhas += (
+                "<tr>"
+                f"<td class='frota'>{frota}</td>"
+                f"<td class='motivo' title='{motivo}'>{motivo}</td>"
+                f"<td class='inicio'>{inicio}</td>"
+                f"<td class='duracao'>{duracao}</td>"
+                f"<td class='atividade' title='{atividade}'>{atividade}</td>"
+                "</tr>"
+            )
 
-        </table>
-        """
+
+    tabela = (
+        "<table class='tabela'>"
+        "<thead>"
+        "<tr>"
+        "<th class='frota'>FROTA</th>"
+        "<th class='motivo'>MOTIVO</th>"
+        "<th class='inicio'>INÍCIO</th>"
+        "<th class='duracao'>DURAÇÃO</th>"
+        "<th class='atividade'>ATIVIDADE</th>"
+        "</tr>"
+        "</thead>"
+        "<tbody>"
+        f"{linhas}"
+        "</tbody>"
+        "</table>"
     )
 
-    return "".join(partes)
+
+    return tabela
 
 
 # ============================================================
@@ -1071,21 +880,23 @@ def criar_tabela_html(dataframe):
 
 def mostrar_setor(nome, dataframe):
 
-    tabela_html = criar_tabela_html(
+    nome_html = escapar(
+        nome
+    )
+
+    tabela = criar_tabela_html(
         dataframe
     )
 
-    bloco = f"""
-    <div class="bloco-setor">
 
-        <div class="titulo-setor-tv">
-            {escapar(nome)}
-        </div>
+    # Tudo enviado ao Streamlit em UMA string HTML.
+    bloco = (
+        "<div class='setor'>"
+        f"<div class='titulo-setor'>{nome_html}</div>"
+        f"{tabela}"
+        "</div>"
+    )
 
-        {tabela_html}
-
-    </div>
-    """
 
     st.markdown(
         bloco,
@@ -1094,7 +905,7 @@ def mostrar_setor(nome, dataframe):
 
 
 # ============================================================
-# CARREGAMENTO
+# BUSCAR DADOS
 # ============================================================
 
 dados = buscar_manutencoes()
@@ -1105,7 +916,7 @@ df = preparar_dataframe(
 
 
 # ============================================================
-# DATA/HORA
+# RELÓGIO
 # ============================================================
 
 agora = datetime.now(
@@ -1117,23 +928,18 @@ agora = datetime.now(
 # CABEÇALHO
 # ============================================================
 
-cabecalho = f"""
-<div class="cabecalho-principal">
+cabecalho = (
+    "<div class='cabecalho'>"
+    "<div class='cabecalho-icone'>🛠️</div>"
+    "<div class='cabecalho-titulo'>"
+    "CONTROLE DE MANUTENÇÃO - DIVERSOS"
+    "</div>"
+    "<div class='cabecalho-relogio'>"
+    f"{agora.strftime('%d/%m/%Y %H:%M')}"
+    "</div>"
+    "</div>"
+)
 
-    <div class="cabecalho-icone">
-        🛠️
-    </div>
-
-    <div class="cabecalho-titulo">
-        CONTROLE DE MANUTENÇÃO - DIVERSOS
-    </div>
-
-    <div class="cabecalho-relogio">
-        {agora.strftime("%d/%m/%Y %H:%M")}
-    </div>
-
-</div>
-"""
 
 st.markdown(
     cabecalho,
@@ -1142,18 +948,24 @@ st.markdown(
 
 
 # ============================================================
-# SEPARAR SETORES
+# FUNÇÃO PARA PEGAR SETOR
 # ============================================================
 
 def pegar_setor(nome):
 
     if df.empty:
+
         return pd.DataFrame()
+
 
     return df[
         df["SETOR"] == nome
     ].copy()
 
+
+# ============================================================
+# DATAFRAMES
+# ============================================================
 
 plantio = pegar_setor(
     "PLANTIO"
@@ -1197,26 +1009,11 @@ outros = pegar_setor(
 
 
 # ============================================================
-# LAYOUT PRINCIPAL
-#
-# COLUNA 1
-# - Plantio
-# - Conservação
-# - Preparo de Solo
-# - Torta de Filtro
-#
-# COLUNA 2
-# - Herbicida
-# - Cultivo
-# - Fertirrigação
-#
-# COLUNA 3
-# - Incêndio
-# - Serviços Agrícolas
+# 3 COLUNAS
 # ============================================================
 
-coluna1, coluna2, coluna3 = st.columns(
-    [1, 1, 1],
+col1, col2, col3 = st.columns(
+    3,
     gap="small"
 )
 
@@ -1225,7 +1022,7 @@ coluna1, coluna2, coluna3 = st.columns(
 # COLUNA 1
 # ============================================================
 
-with coluna1:
+with col1:
 
     mostrar_setor(
         "PLANTIO",
@@ -1252,7 +1049,7 @@ with coluna1:
 # COLUNA 2
 # ============================================================
 
-with coluna2:
+with col2:
 
     mostrar_setor(
         "HERBICIDA",
@@ -1274,7 +1071,7 @@ with coluna2:
 # COLUNA 3
 # ============================================================
 
-with coluna3:
+with col3:
 
     mostrar_setor(
         "INCÊNDIO",
@@ -1288,19 +1085,16 @@ with coluna3:
 
 
 # ============================================================
-# OUTROS / NÃO CLASSIFICADOS
-#
-# Por enquanto vamos deixar visível.
-# Assim conseguimos identificar frentes que ainda precisam
-# ser adicionadas ao mapeamento.
+# OUTROS
 # ============================================================
 
 if not outros.empty:
 
     st.markdown(
-        '<div class="separador-outros"></div>',
+        "<div class='separador'></div>",
         unsafe_allow_html=True
     )
+
 
     mostrar_setor(
         "OUTROS / NÃO CLASSIFICADOS",
@@ -1312,31 +1106,26 @@ if not outros.empty:
 # RODAPÉ
 # ============================================================
 
+rodape = (
+    "<div class='rodape'>"
+    "IFROTA → Supabase"
+    "&nbsp;&nbsp;|&nbsp;&nbsp;"
+    "BASE 3026"
+    "&nbsp;&nbsp;|&nbsp;&nbsp;"
+    "Atualizado em "
+    f"{agora.strftime('%d/%m/%Y %H:%M:%S')}"
+    "</div>"
+)
+
+
 st.markdown(
-    f"""
-    <div class="rodape-tv">
-
-        IFROTA → Supabase
-
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-
-        BASE 3026
-
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-
-        Tela atualizada em
-        {agora.strftime("%d/%m/%Y %H:%M:%S")}
-
-    </div>
-    """,
+    rodape,
     unsafe_allow_html=True
 )
 
 
 # ============================================================
 # AUTO REFRESH
-#
-# Atualiza a página a cada 60 segundos.
 # ============================================================
 
 @st.fragment(
