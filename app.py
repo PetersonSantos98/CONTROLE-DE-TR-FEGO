@@ -11,8 +11,8 @@ from supabase import create_client
 # ============================================================
 
 st.set_page_config(
-    page_title="Controle de Tráfego - Usina Iracema",
-    page_icon="🚜",
+    page_title="Controle de Manutenção - Usina Iracema",
+    page_icon="🔧",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -827,16 +827,6 @@ mostrar_bloco(
 
 
 # ============================================================
-# CARRETAS
-# ============================================================
-
-mostrar_bloco(
-    "CARRETAS",
-    df_carretas
-)
-
-
-# ============================================================
 # TRANSPORTE DE CANA
 # ============================================================
 
@@ -845,6 +835,15 @@ mostrar_bloco(
     df_transporte
 )
 
+
+# ============================================================
+# CARRETAS
+# ============================================================
+
+mostrar_bloco(
+    "CARRETAS",
+    df_carretas
+)
 
 # ============================================================
 # RODAPÉ
