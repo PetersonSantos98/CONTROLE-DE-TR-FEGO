@@ -3,11 +3,11 @@ import pandas as pd
 
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from supabase import create_client, Client
+from supabase import create_client
 
 
 # ============================================================
-# CONFIGURAÇÃO DA PÁGINA
+# CONFIGURAÇÃO
 # ============================================================
 
 st.set_page_config(
@@ -33,15 +33,11 @@ st.markdown(
     """
     <style>
 
-    /* -------------------------------------------------------
-       PÁGINA
-       ------------------------------------------------------- */
-
     .block-container {
-        padding-top: 1.2rem;
+        padding-top: 1.5rem;
         padding-bottom: 2rem;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
         max-width: 1800px;
     }
 
@@ -53,195 +49,72 @@ st.markdown(
         visibility: hidden;
     }
 
-    header {
-        visibility: hidden;
-    }
-
-
-    /* -------------------------------------------------------
-       TÍTULO PRINCIPAL
-       ------------------------------------------------------- */
-
+    /* Título principal */
     .titulo-principal {
-        font-size: 28px;
+        font-size: 27px;
         font-weight: 800;
-        color: #17365D;
-
-        margin-bottom: 3px;
-        padding-bottom: 5px;
-
-        border-bottom: 3px solid #17365D;
+        color: #FFFFFF;
+        background-color: #17365D;
+        padding: 10px 14px;
+        border-radius: 2px;
+        margin-bottom: 5px;
     }
 
+    /* Linha azul */
+    .linha-azul {
+        height: 3px;
+        background-color: #17365D;
+        margin-top: 4px;
+        margin-bottom: 12px;
+    }
 
-    /* -------------------------------------------------------
-       ATUALIZAÇÃO
-       ------------------------------------------------------- */
-
-    .ultima-atualizacao {
+    /* Última atualização */
+    .atualizacao {
         font-size: 14px;
         font-weight: 600;
-
-        margin-top: 8px;
-        margin-bottom: 18px;
+        margin-top: 3px;
+        margin-bottom: 8px;
     }
 
-
-    /* -------------------------------------------------------
-       BLOCO
-       ------------------------------------------------------- */
-
-    .bloco {
-        margin-top: 16px;
-        margin-bottom: 18px;
-    }
-
-
-    /* -------------------------------------------------------
-       TÍTULO DAS TABELAS
-       ------------------------------------------------------- */
-
-    .titulo-tabela {
+    /* Cabeçalho dos grupos */
+    .cabecalho-grupo {
         background-color: #17365D;
         color: white;
-
-        font-weight: 800;
         font-size: 17px;
-
+        font-weight: 800;
         padding: 6px 10px;
-
-        border: 1px solid #17365D;
-
+        margin-top: 18px;
+        margin-bottom: 0px;
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
     }
 
-    .titulo-tabela-nome {
-        display: inline-block;
+    .quantidade-grupo {
+        font-size: 17px;
+        font-weight: 800;
+        padding-right: 10px;
     }
 
-    .titulo-tabela-qtd {
-        display: inline-block;
-        text-align: center;
-        min-width: 50px;
+    /* Dataframe */
+    [data-testid="stDataFrame"] {
+        border: 1px solid #536273;
+        border-radius: 0px;
     }
 
-
-    /* -------------------------------------------------------
-       TABELA
-       ------------------------------------------------------- */
-
-    table.tabela-manutencao {
+    /* Botões */
+    .stButton > button {
         width: 100%;
-        border-collapse: collapse;
-
-        font-size: 14px;
-
-        margin: 0;
-
-        table-layout: auto;
+        font-weight: 600;
     }
 
-
-    table.tabela-manutencao thead th {
-        background-color: #17365D;
-        color: white;
-
-        font-weight: 700;
-
-        text-align: center;
-
-        padding: 5px 7px;
-
-        border: 1px solid #9EA7B3;
-
-        white-space: nowrap;
-    }
-
-
-    table.tabela-manutencao tbody td {
-        padding: 5px 8px;
-
-        border: 1px solid #9EA7B3;
-
-        vertical-align: middle;
-    }
-
-
-    table.tabela-manutencao tbody tr:hover {
-        background-color: rgba(100, 149, 237, 0.10);
-    }
-
-
-    /* -------------------------------------------------------
-       COLUNAS
-       ------------------------------------------------------- */
-
-    .col-frota {
-        text-align: center;
-        font-weight: 700;
-        white-space: nowrap;
-    }
-
-    .col-motivo {
-        text-align: left;
-        min-width: 280px;
-    }
-
-    .col-inicio {
-        text-align: center;
-        white-space: nowrap;
-    }
-
-    .col-tempo {
-        text-align: center;
-        font-weight: 700;
-        white-space: nowrap;
-    }
-
-    .col-frente {
-        text-align: center;
-        white-space: nowrap;
-    }
-
-    .col-local {
-        text-align: left;
-        min-width: 170px;
-    }
-
-
-    /* -------------------------------------------------------
-       SEM REGISTROS
-       ------------------------------------------------------- */
-
-    .sem-registros {
-        padding: 10px;
-
-        border-left: 1px solid #9EA7B3;
-        border-right: 1px solid #9EA7B3;
-        border-bottom: 1px solid #9EA7B3;
-
-        font-size: 14px;
-
-        color: #888;
-    }
-
-
-    /* -------------------------------------------------------
-       RODAPÉ
-       ------------------------------------------------------- */
-
+    /* Rodapé */
     .rodape {
-        margin-top: 30px;
-
+        margin-top: 25px;
         padding-top: 10px;
-
         border-top: 1px solid #555;
-
-        font-size: 12px;
-
         color: #888;
+        font-size: 12px;
     }
 
     </style>
@@ -251,7 +124,7 @@ st.markdown(
 
 
 # ============================================================
-# CREDENCIAIS DO SUPABASE
+# SUPABASE
 # ============================================================
 
 try:
@@ -266,19 +139,19 @@ except Exception:
     )
 
     st.info(
-        "No Streamlit Cloud, abra Settings > Secrets e adicione "
-        "SUPABASE_URL e SUPABASE_KEY."
+        "Configure SUPABASE_URL e SUPABASE_KEY "
+        "nos Secrets do Streamlit."
     )
 
     st.stop()
 
 
 # ============================================================
-# CONEXÃO COM SUPABASE
+# CONEXÃO
 # ============================================================
 
 @st.cache_resource
-def iniciar_supabase():
+def conectar_supabase():
 
     return create_client(
         SUPABASE_URL,
@@ -288,7 +161,7 @@ def iniciar_supabase():
 
 try:
 
-    supabase: Client = iniciar_supabase()
+    supabase = conectar_supabase()
 
 except Exception as erro:
 
@@ -300,7 +173,7 @@ except Exception as erro:
 
 
 # ============================================================
-# CONSULTAR MANUTENÇÕES
+# BUSCAR DADOS
 # ============================================================
 
 @st.cache_data(ttl=30)
@@ -335,19 +208,14 @@ def buscar_manutencoes():
     except Exception as erro:
 
         st.error(
-            f"Erro ao consultar manutenções: {erro}"
+            f"Erro ao consultar o Supabase: {erro}"
         )
 
         return []
 
 
 # ============================================================
-# LIMPAR NÚMEROS
-#
-# Exemplo:
-#
-# 925.0 -> 925
-# 1.0   -> 1
+# LIMPAR NÚMERO
 # ============================================================
 
 def limpar_numero(valor):
@@ -373,7 +241,10 @@ def limpar_numero(valor):
         numero = float(texto)
 
         if numero.is_integer():
-            return str(int(numero))
+
+            return str(
+                int(numero)
+            )
 
     except Exception:
         pass
@@ -382,27 +253,13 @@ def limpar_numero(valor):
 
 
 # ============================================================
-# CONVERTER HORÁRIO DO SUPABASE
-#
-# Supabase:
-# UTC
-#
-# Aplicativo:
-# America/Sao_Paulo
+# CONVERTER HORÁRIO
 # ============================================================
 
 def converter_inicio(valor):
 
     if valor is None:
         return pd.NaT
-
-    try:
-
-        if pd.isna(valor):
-            return pd.NaT
-
-    except Exception:
-        pass
 
     try:
 
@@ -413,6 +270,7 @@ def converter_inicio(valor):
         )
 
         if pd.isna(data):
+
             return pd.NaT
 
         return data.tz_convert(
@@ -426,15 +284,12 @@ def converter_inicio(valor):
 
 # ============================================================
 # FORMATAR INÍCIO
-#
-# Exemplo:
-#
-# 28/09 05:35
 # ============================================================
 
 def formatar_inicio(valor):
 
     if pd.isna(valor):
+
         return "-"
 
     return valor.strftime(
@@ -443,32 +298,29 @@ def formatar_inicio(valor):
 
 
 # ============================================================
-# CALCULAR TEMPO EM MANUTENÇÃO
-#
-# Exemplo:
-#
-# 00:42
-# 05:13
-# 148:50
-# 1365:54
+# CALCULAR TEMPO
 # ============================================================
 
-def formatar_duracao(inicio):
+def calcular_tempo(inicio):
 
     if pd.isna(inicio):
+
         return "-"
 
     agora = pd.Timestamp.now(
         tz="America/Sao_Paulo"
     )
 
-    diferenca = agora - inicio
+    diferenca = (
+        agora - inicio
+    )
 
     segundos = int(
         diferenca.total_seconds()
     )
 
     if segundos < 0:
+
         segundos = 0
 
     minutos_totais = (
@@ -496,14 +348,18 @@ def formatar_duracao(inicio):
 def normalizar_frente(valor):
 
     if valor is None:
+
         return "-"
 
     texto = str(valor).strip()
 
     if texto == "":
+
         return "-"
 
-    texto_upper = texto.upper()
+    texto_upper = (
+        texto.upper()
+    )
 
     if "FRENTE 1" in texto_upper:
         return "FRENTE 1"
@@ -524,51 +380,13 @@ def normalizar_frente(valor):
 
 
 # ============================================================
-# ESCAPAR HTML
-# ============================================================
-
-def escapar_html(valor):
-
-    if valor is None:
-        return ""
-
-    texto = str(valor)
-
-    texto = texto.replace(
-        "&",
-        "&amp;"
-    )
-
-    texto = texto.replace(
-        "<",
-        "&lt;"
-    )
-
-    texto = texto.replace(
-        ">",
-        "&gt;"
-    )
-
-    texto = texto.replace(
-        '"',
-        "&quot;"
-    )
-
-    texto = texto.replace(
-        "'",
-        "&#39;"
-    )
-
-    return texto
-
-
-# ============================================================
-# PREPARAR DATAFRAME
+# PREPARAR DADOS
 # ============================================================
 
 def preparar_dataframe(dados):
 
     if not dados:
+
         return pd.DataFrame()
 
     df = pd.DataFrame(
@@ -576,9 +394,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # GARANTIR COLUNAS
-    # --------------------------------------------------------
+    # ========================================================
 
     colunas = [
 
@@ -595,6 +413,7 @@ def preparar_dataframe(dados):
 
     ]
 
+
     for coluna in colunas:
 
         if coluna not in df.columns:
@@ -602,9 +421,9 @@ def preparar_dataframe(dados):
             df[coluna] = None
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # BASE
-    # --------------------------------------------------------
+    # ========================================================
 
     df["base"] = pd.to_numeric(
         df["base"],
@@ -612,79 +431,136 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
-    # SOMENTE COLHEITA
-    # BASE 2026
-    # --------------------------------------------------------
-
     df = df[
         df["base"] == 2026
     ].copy()
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # TIPO
-    # --------------------------------------------------------
+    # ========================================================
 
     df["tipo_equipamento"] = (
+
         df["tipo_equipamento"]
+
         .fillna("")
+
         .astype(str)
+
         .str.strip()
+
         .str.upper()
+
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # FROTA
-    # --------------------------------------------------------
+    # ========================================================
 
     df["frota"] = (
+
         df["frota"]
-        .apply(limpar_numero)
+
+        .apply(
+            limpar_numero
+        )
+
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # GLEBA
-    # --------------------------------------------------------
+    # ========================================================
 
     df["gleba"] = (
+
         df["gleba"]
-        .apply(limpar_numero)
+
+        .apply(
+            limpar_numero
+        )
+
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # INÍCIO
-    # --------------------------------------------------------
+    # ========================================================
 
     df["inicio_dt"] = (
+
         df["inicio"]
-        .apply(converter_inicio)
+
+        .apply(
+            converter_inicio
+        )
+
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
+    # DATA FORMATADA
+    # ========================================================
+
+    df["INÍCIO"] = (
+
+        df["inicio_dt"]
+
+        .apply(
+            formatar_inicio
+        )
+
+    )
+
+
+    # ========================================================
+    # TEMPO
+    # ========================================================
+
+    df["TEMPO"] = (
+
+        df["inicio_dt"]
+
+        .apply(
+            calcular_tempo
+        )
+
+    )
+
+
+    # ========================================================
     # FRENTE
-    # --------------------------------------------------------
+    # ========================================================
 
-    df["frente_exibicao"] = (
+    df["FRENTE"] = (
+
         df["frente"]
-        .apply(normalizar_frente)
+
+        .apply(
+            normalizar_frente
+        )
+
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # LOCAL
-    # --------------------------------------------------------
+    # ========================================================
 
     df["local"] = (
+
         df["local"]
+
         .fillna("-")
+
         .astype(str)
+
         .str.strip()
+
     )
+
 
     df.loc[
         df["local"] == "",
@@ -692,54 +568,41 @@ def preparar_dataframe(dados):
     ] = "-"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # MOTIVO
-    # --------------------------------------------------------
+    # ========================================================
 
     df["motivo"] = (
+
         df["motivo"]
+
         .fillna("-")
+
         .astype(str)
+
         .str.strip()
+
     )
 
 
-    # --------------------------------------------------------
-    # TEMPO
-    # --------------------------------------------------------
-
-    df["tempo"] = (
-        df["inicio_dt"]
-        .apply(formatar_duracao)
-    )
-
-
-    # --------------------------------------------------------
-    # INÍCIO FORMATADO
-    # --------------------------------------------------------
-
-    df["inicio_exibicao"] = (
-        df["inicio_dt"]
-        .apply(formatar_inicio)
-    )
-
-
-    # --------------------------------------------------------
+    # ========================================================
     # ORDENAR
-    #
-    # Manutenções mais antigas primeiro.
-    # --------------------------------------------------------
+    # ========================================================
 
     df = df.sort_values(
+
         by=[
             "inicio_dt",
             "frota"
         ],
+
         ascending=[
             True,
             True
         ],
+
         na_position="last"
+
     )
 
 
@@ -747,12 +610,12 @@ def preparar_dataframe(dados):
 
 
 # ============================================================
-# GERAR TABELA HTML
+# MOSTRAR BLOCO
 # ============================================================
 
-def gerar_tabela(
-    dataframe,
-    titulo
+def mostrar_bloco(
+    titulo,
+    dataframe
 ):
 
     quantidade = len(
@@ -760,179 +623,172 @@ def gerar_tabela(
     )
 
 
-    # --------------------------------------------------------
-    # TÍTULO
-    # --------------------------------------------------------
+    # ========================================================
+    # CABEÇALHO
+    # ========================================================
 
-    html = f"""
-    <div class="bloco">
-
-        <div class="titulo-tabela">
-
-            <span class="titulo-tabela-nome">
-                {escapar_html(titulo)}
-            </span>
-
-            <span class="titulo-tabela-qtd">
-                {quantidade}
-            </span>
-
-        </div>
-    """
+    st.markdown(
+        f"""
+<div class="cabecalho-grupo">
+<span>{titulo}</span>
+<span class="quantidade-grupo">{quantidade}</span>
+</div>
+""",
+        unsafe_allow_html=True
+    )
 
 
-    # --------------------------------------------------------
-    # SEM REGISTROS
-    # --------------------------------------------------------
+    # ========================================================
+    # SEM EQUIPAMENTOS
+    # ========================================================
 
     if dataframe.empty:
 
-        html += """
-        <div class="sem-registros">
-            Nenhum equipamento em manutenção.
-        </div>
-
-        </div>
-        """
-
-        return html
-
-
-    # --------------------------------------------------------
-    # CABEÇALHO DA TABELA
-    # --------------------------------------------------------
-
-    html += """
-    <table class="tabela-manutencao">
-
-        <thead>
-
-            <tr>
-
-                <th>FROTA</th>
-
-                <th>MOTIVO</th>
-
-                <th>INÍCIO</th>
-
-                <th>TEMPO</th>
-
-                <th>FRENTE</th>
-
-                <th>LOCAL</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-    """
-
-
-    # --------------------------------------------------------
-    # LINHAS
-    # --------------------------------------------------------
-
-    for _, linha in dataframe.iterrows():
-
-        frota = escapar_html(
-            linha["frota"]
+        st.info(
+            "Nenhum equipamento em manutenção."
         )
 
-        motivo = escapar_html(
-            linha["motivo"]
-        )
-
-        inicio = escapar_html(
-            linha["inicio_exibicao"]
-        )
-
-        tempo = escapar_html(
-            linha["tempo"]
-        )
-
-        frente = escapar_html(
-            linha["frente_exibicao"]
-        )
-
-        local = escapar_html(
-            linha["local"]
-        )
+        return
 
 
-        html += f"""
-        <tr>
+    # ========================================================
+    # PREPARAR TABELA
+    # ========================================================
 
-            <td class="col-frota">
-                {frota}
-            </td>
+    tabela = pd.DataFrame({
 
-            <td class="col-motivo">
-                {motivo}
-            </td>
+        "FROTA":
+            dataframe["frota"],
 
-            <td class="col-inicio">
-                {inicio}
-            </td>
+        "MOTIVO":
+            dataframe["motivo"],
 
-            <td class="col-tempo">
-                {tempo}
-            </td>
+        "INÍCIO":
+            dataframe["INÍCIO"],
 
-            <td class="col-frente">
-                {frente}
-            </td>
+        "TEMPO":
+            dataframe["TEMPO"],
 
-            <td class="col-local">
-                {local}
-            </td>
+        "FRENTE":
+            dataframe["FRENTE"],
 
-        </tr>
-        """
+        "LOCAL":
+            dataframe["local"]
+
+    })
 
 
-    html += """
-        </tbody>
+    # ========================================================
+    # EXIBIR
+    # ========================================================
 
-    </table>
+    st.dataframe(
 
-    </div>
-    """
+        tabela,
 
+        hide_index=True,
 
-    return html
+        use_container_width=True,
+
+        row_height=30,
+
+        column_config={
+
+            "FROTA":
+                st.column_config.TextColumn(
+                    "FROTA",
+                    width="small"
+                ),
+
+            "MOTIVO":
+                st.column_config.TextColumn(
+                    "MOTIVO",
+                    width="large"
+                ),
+
+            "INÍCIO":
+                st.column_config.TextColumn(
+                    "INÍCIO",
+                    width="medium"
+                ),
+
+            "TEMPO":
+                st.column_config.TextColumn(
+                    "TEMPO",
+                    width="small"
+                ),
+
+            "FRENTE":
+                st.column_config.TextColumn(
+                    "FRENTE",
+                    width="medium"
+                ),
+
+            "LOCAL":
+                st.column_config.TextColumn(
+                    "LOCAL",
+                    width="large"
+                )
+
+        }
+
+    )
 
 
 # ============================================================
-# TÍTULO PRINCIPAL
+# TÍTULO
 # ============================================================
 
 st.markdown(
     """
-    <div class="titulo-principal">
-
-        CONTROLE DE TRÁFEGO - USINA IRACEMA
-
-    </div>
-    """,
+<div class="titulo-principal">
+CONTROLE DE TRÁFEGO - USINA IRACEMA
+</div>
+<div class="linha-azul"></div>
+""",
     unsafe_allow_html=True
 )
 
 
 # ============================================================
-# LINHA DE ATUALIZAÇÃO
+# CARREGAR DADOS
 # ============================================================
 
-col_atualizacao, col_botao = st.columns(
-    [8, 1]
+dados = buscar_manutencoes()
+
+df = preparar_dataframe(
+    dados
 )
 
 
 # ============================================================
-# BOTÃO ATUALIZAR
+# ÚLTIMA ATUALIZAÇÃO
 # ============================================================
 
-with col_botao:
+agora = datetime.now(
+    FUSO_BR
+)
+
+
+col1, col2 = st.columns(
+    [8, 1]
+)
+
+
+with col1:
+
+    st.markdown(
+        f"""
+<div class="atualizacao">
+Última Atualização: {agora.strftime("%d/%m/%Y %H:%M")}
+&nbsp;&nbsp; 🟢
+</div>
+""",
+        unsafe_allow_html=True
+    )
+
+
+with col2:
 
     if st.button(
         "🔄 Atualizar",
@@ -945,111 +801,56 @@ with col_botao:
 
 
 # ============================================================
-# BUSCAR DADOS
-# ============================================================
-
-dados = buscar_manutencoes()
-
-
-# ============================================================
-# PREPARAR DADOS
-# ============================================================
-
-df = preparar_dataframe(
-    dados
-)
-
-
-# ============================================================
-# HORÁRIO ATUAL
-# ============================================================
-
-agora = datetime.now(
-    FUSO_BR
-)
-
-
-# ============================================================
-# MOSTRAR ATUALIZAÇÃO
-# ============================================================
-
-with col_atualizacao:
-
-    st.markdown(
-        f"""
-        <div class="ultima-atualizacao">
-
-            Última Atualização:
-            {agora.strftime("%d/%m/%Y %H:%M")}
-
-            &nbsp;&nbsp; 🟢
-
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-
-# ============================================================
-# DATAFRAMES VAZIOS
+# SEPARAR EQUIPAMENTOS
 # ============================================================
 
 if df.empty:
 
-    df_colhedoras = pd.DataFrame(
-        columns=df.columns
-    )
+    df_colhedoras = pd.DataFrame()
 
-    df_tratores = pd.DataFrame(
-        columns=df.columns
-    )
+    df_tratores = pd.DataFrame()
 
-    df_transporte = pd.DataFrame(
-        columns=df.columns
-    )
+    df_transporte = pd.DataFrame()
 
 
 else:
 
-    # ========================================================
+    # --------------------------------------------------------
     # COLHEDORAS
-    #
-    # BASE 2026
-    # CLASSE 4
-    # tipo_equipamento = MAQUINA
-    # ========================================================
+    # MAQUINA / CLASSE 4
+    # --------------------------------------------------------
 
     df_colhedoras = df[
+
         df["tipo_equipamento"]
         .eq("MAQUINA")
+
     ].copy()
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # TRATORES
-    #
-    # BASE 2026
-    # CLASSE 2
-    # tipo_equipamento = TRATOR
-    # ========================================================
+    # TRATOR / CLASSE 2
+    # --------------------------------------------------------
 
     df_tratores = df[
+
         df["tipo_equipamento"]
         .eq("TRATOR")
+
     ].copy()
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # TRANSPORTE DE CANA
-    #
-    # BASE 2026
-    # CLASSE 1
-    # tipo_equipamento = CAMINHAO
-    # ========================================================
+    # CAMINHAO / CLASSE 1
+    # --------------------------------------------------------
 
     df_transporte = df[
+
         df["tipo_equipamento"]
         .eq("CAMINHAO")
+
     ].copy()
 
 
@@ -1057,12 +858,9 @@ else:
 # COLHEDORAS
 # ============================================================
 
-st.markdown(
-    gerar_tabela(
-        df_colhedoras,
-        "COLHEDORAS"
-    ),
-    unsafe_allow_html=True
+mostrar_bloco(
+    "COLHEDORAS",
+    df_colhedoras
 )
 
 
@@ -1070,12 +868,9 @@ st.markdown(
 # TRATORES
 # ============================================================
 
-st.markdown(
-    gerar_tabela(
-        df_tratores,
-        "TRATORES"
-    ),
-    unsafe_allow_html=True
+mostrar_bloco(
+    "TRATORES",
+    df_tratores
 )
 
 
@@ -1083,12 +878,9 @@ st.markdown(
 # TRANSPORTE DE CANA
 # ============================================================
 
-st.markdown(
-    gerar_tabela(
-        df_transporte,
-        "TRANSP. CANA"
-    ),
-    unsafe_allow_html=True
+mostrar_bloco(
+    "TRANSP. CANA",
+    df_transporte
 )
 
 
@@ -1098,18 +890,12 @@ st.markdown(
 
 st.markdown(
     f"""
-    <div class="rodape">
-
-        Dados de manutenção:
-        IFROTA → Supabase
-
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-
-        Tela atualizada em
-        {agora.strftime("%d/%m/%Y %H:%M:%S")}
-
-    </div>
-    """,
+<div class="rodape">
+Dados de manutenção: IFROTA → Supabase
+&nbsp;&nbsp;|&nbsp;&nbsp;
+Tela atualizada em {agora.strftime("%d/%m/%Y %H:%M:%S")}
+</div>
+""",
     unsafe_allow_html=True
 )
 
