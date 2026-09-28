@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import html
+import unicodedata
 
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -28,119 +30,339 @@ st.markdown(
     """
     <style>
 
-    /* Oculta menu lateral */
+    /* =======================================================
+       ESCONDER ELEMENTOS DO STREAMLIT
+       ======================================================= */
+
     [data-testid="stSidebar"] {
-        display: none;
+        display: none !important;
     }
 
     [data-testid="collapsedControl"] {
-        display: none;
-    }
-
-    /* Remove espaços desnecessários */
-    .block-container {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        padding-left: 0.6rem;
-        padding-right: 0.6rem;
-        max-width: 100%;
+        display: none !important;
     }
 
     #MainMenu {
-        visibility: hidden;
+        visibility: hidden !important;
     }
 
     footer {
-        visibility: hidden;
+        visibility: hidden !important;
     }
 
     header {
-        visibility: hidden;
+        visibility: hidden !important;
+        height: 0 !important;
     }
 
-    /* Título principal */
-    .titulo-principal {
+
+    /* =======================================================
+       PÁGINA
+       ======================================================= */
+
+    .stApp {
+        background-color: #FFFFFF;
+    }
+
+    .block-container {
+        padding-top: 0.15rem !important;
+        padding-bottom: 0.3rem !important;
+        padding-left: 0.25rem !important;
+        padding-right: 0.25rem !important;
+        max-width: 100% !important;
+    }
+
+    div[data-testid="stVerticalBlock"] {
+        gap: 0.08rem !important;
+    }
+
+    div[data-testid="stHorizontalBlock"] {
+        gap: 0.7rem !important;
+        align-items: flex-start !important;
+    }
+
+
+    /* =======================================================
+       CABEÇALHO PRINCIPAL
+       ======================================================= */
+
+    .cabecalho-principal {
+        width: 100%;
+        height: 43px;
+
         position: relative;
 
-        background-color: #FFFFFF;
-        color: #17365D;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #FFFFFF;
 
         border-bottom: 7px solid #17365D;
 
-        font-size: 32px;
-        font-weight: 800;
+        margin: 0 0 7px 0;
+        padding: 0 5px;
 
-        text-align: center;
-
-        padding: 5px 10px 8px 10px;
-
-        margin-bottom: 12px;
+        box-sizing: border-box;
     }
 
-    /* Data/hora no canto direito */
-    .relogio {
+    .cabecalho-icone {
         position: absolute;
 
-        right: 20px;
-        top: 7px;
+        left: 7px;
+        top: 4px;
 
-        font-size: 21px;
-        font-weight: 800;
-
-        color: #17365D;
+        font-size: 27px;
+        line-height: 32px;
     }
 
-    /* Título de cada setor */
-    .titulo-setor {
-
+    .cabecalho-titulo {
         color: #17365D;
 
-        font-size: 20px;
+        font-family: Arial, sans-serif;
+
+        font-size: 25px;
         font-weight: 800;
 
         text-align: center;
 
-        margin-top: 5px;
-        margin-bottom: 2px;
-
-        line-height: 1.05;
+        line-height: 32px;
     }
 
-    /* Quantidade */
-    .quantidade {
-        font-size: 11px;
-        color: #555;
+    .cabecalho-relogio {
+        position: absolute;
 
-        text-align: right;
+        right: 12px;
+        top: 7px;
 
-        margin-top: -18px;
-        margin-bottom: 2px;
+        color: #17365D;
+
+        font-family: Arial, sans-serif;
+
+        font-size: 17px;
+        font-weight: 800;
+
+        white-space: nowrap;
     }
 
-    /* Reduz espaço entre componentes */
-    div[data-testid="stVerticalBlock"] {
-        gap: 0.25rem;
+
+    /* =======================================================
+       BLOCO DE CADA SETOR
+       ======================================================= */
+
+    .bloco-setor {
+        width: 100%;
+
+        margin: 0 0 7px 0;
+        padding: 0;
+
+        box-sizing: border-box;
     }
 
-    /* Dataframe */
-    [data-testid="stDataFrame"] {
-        border: 1px solid #17365D;
-        border-radius: 0px;
+    .titulo-setor-tv {
+        width: 100%;
+
+        color: #17365D;
+
+        font-family: Arial, sans-serif;
+
+        font-size: 17px;
+        font-weight: 800;
+
+        text-align: center;
+
+        line-height: 19px;
+
+        margin: 0;
+        padding: 1px 0 2px 0;
+
+        box-sizing: border-box;
     }
 
-    /* Rodapé */
-    .rodape {
-        margin-top: 12px;
 
-        border-top: 1px solid #CCCCCC;
+    /* =======================================================
+       TABELAS
+       ======================================================= */
 
-        padding-top: 5px;
+    .tabela-tv {
+        width: 100%;
+
+        border-collapse: collapse;
+        border-spacing: 0;
+
+        table-layout: fixed;
+
+        font-family: Arial, sans-serif;
+
+        margin: 0;
+        padding: 0;
+    }
+
+    .tabela-tv thead tr {
+        background-color: #17365D;
+    }
+
+    .tabela-tv th {
+        background-color: #17365D;
+        color: #FFFFFF;
+
+        border: 1px solid #FFFFFF;
+
+        padding: 1px 3px;
+
+        height: 17px;
 
         font-size: 10px;
+        font-weight: 700;
 
-        color: #777777;
+        line-height: 12px;
+
+        text-align: center;
+
+        white-space: nowrap;
+
+        box-sizing: border-box;
+    }
+
+    .tabela-tv td {
+        color: #000000;
+        background-color: #FFFFFF;
+
+        border: 1px solid #7F7F7F;
+
+        padding: 1px 3px;
+
+        height: 18px;
+
+        font-size: 10px;
+        font-weight: 600;
+
+        line-height: 13px;
+
+        vertical-align: middle;
+
+        box-sizing: border-box;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+
+    /* =======================================================
+       LARGURAS
+       ======================================================= */
+
+    .col-frota {
+        width: 12%;
+        text-align: center !important;
+    }
+
+    .col-motivo {
+        width: 38%;
+        text-align: left !important;
+    }
+
+    .col-inicio {
+        width: 17%;
+        text-align: center !important;
+    }
+
+    .col-duracao {
+        width: 13%;
+        text-align: center !important;
+    }
+
+    .col-atividade {
+        width: 20%;
+        text-align: center !important;
+    }
+
+
+    /* =======================================================
+       ATIVIDADE
+       ======================================================= */
+
+    td.col-atividade {
+        background-color: #A6A6A6;
+        color: #000000;
+
+        font-size: 9px;
+        font-weight: 700;
+    }
+
+
+    /* =======================================================
+       SEM REGISTROS
+       ======================================================= */
+
+    .linha-vazia {
+        text-align: center !important;
+        color: #666666 !important;
+        font-weight: 400 !important;
+    }
+
+
+    /* =======================================================
+       OUTROS
+       ======================================================= */
+
+    .separador-outros {
+        width: 100%;
+        border-top: 2px solid #17365D;
+
+        margin-top: 6px;
+        margin-bottom: 4px;
+    }
+
+
+    /* =======================================================
+       RODAPÉ
+       ======================================================= */
+
+    .rodape-tv {
+        width: 100%;
+
+        border-top: 1px solid #AAAAAA;
+
+        margin-top: 6px;
+        padding-top: 3px;
+
+        font-family: Arial, sans-serif;
+
+        font-size: 9px;
+
+        color: #666666;
 
         text-align: right;
+    }
+
+
+    /* =======================================================
+       TELAS GRANDES / TV
+       ======================================================= */
+
+    @media (min-width: 1600px) {
+
+        .cabecalho-titulo {
+            font-size: 28px;
+        }
+
+        .cabecalho-relogio {
+            font-size: 19px;
+        }
+
+        .titulo-setor-tv {
+            font-size: 18px;
+        }
+
+        .tabela-tv th {
+            font-size: 10px;
+        }
+
+        .tabela-tv td {
+            font-size: 10px;
+        }
     }
 
     </style>
@@ -160,9 +382,7 @@ try:
 
 except Exception:
 
-    st.error(
-        "Credenciais do Supabase não encontradas."
-    )
+    st.error("Credenciais do Supabase não encontradas.")
 
     st.info(
         "Configure SUPABASE_URL e SUPABASE_KEY "
@@ -196,6 +416,7 @@ except Exception as erro:
 
 # ============================================================
 # BUSCAR MANUTENÇÕES
+# BASE 3026 = DIVERSOS
 # ============================================================
 
 @st.cache_data(ttl=55)
@@ -237,7 +458,7 @@ def buscar_manutencoes():
 
 
 # ============================================================
-# LIMPAR FROTA
+# LIMPAR NÚMERO
 # ============================================================
 
 def limpar_numero(valor):
@@ -267,6 +488,50 @@ def limpar_numero(valor):
 
     except Exception:
         pass
+
+    return texto
+
+
+# ============================================================
+# NORMALIZAR TEXTO
+# ============================================================
+
+def normalizar_texto(valor):
+
+    if valor is None:
+        return ""
+
+    try:
+
+        if pd.isna(valor):
+            return ""
+
+    except Exception:
+        pass
+
+    texto = str(valor).strip().upper()
+
+    return texto
+
+
+# ============================================================
+# NORMALIZAR TEXTO SEM ACENTOS
+# ============================================================
+
+def texto_sem_acento(valor):
+
+    texto = normalizar_texto(valor)
+
+    texto = unicodedata.normalize(
+        "NFKD",
+        texto
+    )
+
+    texto = "".join(
+        caractere
+        for caractere in texto
+        if not unicodedata.combining(caractere)
+    )
 
     return texto
 
@@ -345,44 +610,25 @@ def calcular_duracao(inicio):
 
 
 # ============================================================
-# NORMALIZAR TEXTO
-# ============================================================
-
-def normalizar_texto(valor):
-
-    if valor is None:
-        return ""
-
-    try:
-
-        if pd.isna(valor):
-            return ""
-
-    except Exception:
-        pass
-
-    return str(valor).strip().upper()
-
-
-# ============================================================
 # IDENTIFICAR SETOR
 # ============================================================
 
 def identificar_setor(frente):
 
-    texto = normalizar_texto(frente)
+    texto = texto_sem_acento(frente)
 
-    # --------------------------------------------------------
+
+    # ========================================================
     # PLANTIO
-    # --------------------------------------------------------
+    # ========================================================
 
     if "PLANTIO" in texto:
         return "PLANTIO"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # CONSERVAÇÃO
-    # --------------------------------------------------------
+    # ========================================================
 
     if (
         "CONSERV" in texto
@@ -391,9 +637,9 @@ def identificar_setor(frente):
         return "CONSERVAÇÃO"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # PREPARO DE SOLO
-    # --------------------------------------------------------
+    # ========================================================
 
     if (
         "PREPARO" in texto
@@ -402,9 +648,9 @@ def identificar_setor(frente):
         return "PREPARO DE SOLO"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # TORTA DE FILTRO
-    # --------------------------------------------------------
+    # ========================================================
 
     if (
         "TORTA" in texto
@@ -413,25 +659,25 @@ def identificar_setor(frente):
         return "TORTA DE FILTRO"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # HERBICIDA
-    # --------------------------------------------------------
+    # ========================================================
 
     if "HERBICIDA" in texto:
         return "HERBICIDA"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # CULTIVO
-    # --------------------------------------------------------
+    # ========================================================
 
     if "CULTIVO" in texto:
         return "CULTIVO"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # FERTIRRIGAÇÃO
-    # --------------------------------------------------------
+    # ========================================================
 
     if (
         "FERTIRRIGA" in texto
@@ -440,20 +686,17 @@ def identificar_setor(frente):
         return "FERTIRRIGAÇÃO"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # INCÊNDIO
-    # --------------------------------------------------------
+    # ========================================================
 
-    if (
-        "INCENDIO" in texto
-        or "INCÊNDIO" in texto
-    ):
+    if "INCENDIO" in texto:
         return "INCÊNDIO"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # SERVIÇOS AGRÍCOLAS
-    # --------------------------------------------------------
+    # ========================================================
 
     if (
         "SERVI" in texto
@@ -461,10 +704,6 @@ def identificar_setor(frente):
     ):
         return "SERVIÇOS AGRÍCOLAS"
 
-
-    # --------------------------------------------------------
-    # NÃO IDENTIFICADO
-    # --------------------------------------------------------
 
     return "OUTROS"
 
@@ -481,9 +720,9 @@ def preparar_dataframe(dados):
     df = pd.DataFrame(dados)
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # GARANTIR COLUNAS
-    # --------------------------------------------------------
+    # ========================================================
 
     colunas = [
         "tipo_equipamento",
@@ -504,9 +743,9 @@ def preparar_dataframe(dados):
             df[coluna] = None
 
 
-    # --------------------------------------------------------
-    # BASE
-    # --------------------------------------------------------
+    # ========================================================
+    # FILTRAR BASE
+    # ========================================================
 
     df["base"] = pd.to_numeric(
         df["base"],
@@ -518,9 +757,9 @@ def preparar_dataframe(dados):
     ].copy()
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # FROTA
-    # --------------------------------------------------------
+    # ========================================================
 
     df["frota"] = (
         df["frota"]
@@ -528,9 +767,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
-    # DATA
-    # --------------------------------------------------------
+    # ========================================================
+    # DATA/HORA
+    # ========================================================
 
     df["inicio_dt"] = (
         df["inicio"]
@@ -538,9 +777,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
-    # INÍCIO
-    # --------------------------------------------------------
+    # ========================================================
+    # INÍCIO FORMATADO
+    # ========================================================
 
     df["INÍCIO"] = (
         df["inicio_dt"]
@@ -548,9 +787,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # DURAÇÃO
-    # --------------------------------------------------------
+    # ========================================================
 
     df["DURAÇÃO"] = (
         df["inicio_dt"]
@@ -558,9 +797,9 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # MOTIVO
-    # --------------------------------------------------------
+    # ========================================================
 
     df["motivo"] = (
         df["motivo"]
@@ -570,9 +809,33 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
+    # FRENTE
+    # ========================================================
+
+    df["frente"] = (
+        df["frente"]
+        .fillna("")
+        .astype(str)
+        .str.strip()
+    )
+
+
+    # ========================================================
+    # LOCAL
+    # ========================================================
+
+    df["local"] = (
+        df["local"]
+        .fillna("")
+        .astype(str)
+        .str.strip()
+    )
+
+
+    # ========================================================
     # SETOR
-    # --------------------------------------------------------
+    # ========================================================
 
     df["SETOR"] = (
         df["frente"]
@@ -580,18 +843,19 @@ def preparar_dataframe(dados):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # ATIVIDADE
     #
-    # Ainda não temos esse dado no IFROTA/Supabase.
-    # --------------------------------------------------------
+    # Ainda não existe uma coluna de atividade no Supabase.
+    # Mantemos "-" até adicionarmos essa informação.
+    # ========================================================
 
     df["ATIVIDADE"] = "-"
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # ORDENAÇÃO
-    # --------------------------------------------------------
+    # ========================================================
 
     df = df.sort_values(
         by=[
@@ -611,130 +875,221 @@ def preparar_dataframe(dados):
 
 
 # ============================================================
-# MOSTRAR SETOR
+# ESCAPAR TEXTO PARA HTML
 # ============================================================
 
-def mostrar_setor(
-    nome,
-    dataframe
-):
+def escapar(valor):
 
-    st.markdown(
-        f"""
-        <div class="titulo-setor">
-            {nome}
-        </div>
-        """,
-        unsafe_allow_html=True
+    if valor is None:
+        return "-"
+
+    try:
+
+        if pd.isna(valor):
+            return "-"
+
+    except Exception:
+        pass
+
+    texto = str(valor).strip()
+
+    if texto == "":
+        texto = "-"
+
+    return html.escape(
+        texto,
+        quote=True
     )
 
 
-    # --------------------------------------------------------
-    # SEM EQUIPAMENTOS
-    # --------------------------------------------------------
+# ============================================================
+# CRIAR HTML DA TABELA
+# ============================================================
+
+def criar_tabela_html(dataframe):
+
+    partes = []
+
+    partes.append(
+        """
+        <table class="tabela-tv">
+
+            <thead>
+
+                <tr>
+
+                    <th class="col-frota">
+                        FROTA
+                    </th>
+
+                    <th class="col-motivo">
+                        MOTIVO
+                    </th>
+
+                    <th class="col-inicio">
+                        INÍCIO
+                    </th>
+
+                    <th class="col-duracao">
+                        DURAÇÃO
+                    </th>
+
+                    <th class="col-atividade">
+                        ATIVIDADE
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+        """
+    )
+
+
+    # ========================================================
+    # SEM REGISTROS
+    # ========================================================
 
     if dataframe.empty:
 
-        tabela_vazia = pd.DataFrame(
-            [{
-                "FROTA": "-",
-                "MOTIVO": "-",
-                "INÍCIO": "-",
-                "DURAÇÃO": "-",
-                "ATIVIDADE": "-"
-            }]
+        partes.append(
+            """
+            <tr>
+
+                <td class="col-frota linha-vazia">
+                    -
+                </td>
+
+                <td class="col-motivo linha-vazia">
+                    -
+                </td>
+
+                <td class="col-inicio linha-vazia">
+                    -
+                </td>
+
+                <td class="col-duracao linha-vazia">
+                    -
+                </td>
+
+                <td class="col-atividade linha-vazia">
+                    -
+                </td>
+
+            </tr>
+            """
         )
 
-        st.dataframe(
-            tabela_vazia,
-            hide_index=True,
-            use_container_width=True,
-            row_height=26,
-            height=62
-        )
 
-        return
+    # ========================================================
+    # REGISTROS
+    # ========================================================
+
+    else:
+
+        for _, linha in dataframe.iterrows():
+
+            frota = escapar(
+                linha.get("frota", "-")
+            )
+
+            motivo = escapar(
+                linha.get("motivo", "-")
+            )
+
+            inicio = escapar(
+                linha.get("INÍCIO", "-")
+            )
+
+            duracao = escapar(
+                linha.get("DURAÇÃO", "-")
+            )
+
+            atividade = escapar(
+                linha.get("ATIVIDADE", "-")
+            )
+
+            partes.append(
+                f"""
+                <tr>
+
+                    <td
+                        class="col-frota"
+                        title="{frota}"
+                    >
+                        {frota}
+                    </td>
+
+                    <td
+                        class="col-motivo"
+                        title="{motivo}"
+                    >
+                        {motivo}
+                    </td>
+
+                    <td
+                        class="col-inicio"
+                        title="{inicio}"
+                    >
+                        {inicio}
+                    </td>
+
+                    <td
+                        class="col-duracao"
+                        title="{duracao}"
+                    >
+                        {duracao}
+                    </td>
+
+                    <td
+                        class="col-atividade"
+                        title="{atividade}"
+                    >
+                        {atividade}
+                    </td>
+
+                </tr>
+                """
+            )
 
 
-    # --------------------------------------------------------
-    # TABELA
-    # --------------------------------------------------------
+    partes.append(
+        """
+            </tbody>
 
-    tabela = pd.DataFrame({
-
-        "FROTA":
-            dataframe["frota"],
-
-        "MOTIVO":
-            dataframe["motivo"],
-
-        "INÍCIO":
-            dataframe["INÍCIO"],
-
-        "DURAÇÃO":
-            dataframe["DURAÇÃO"],
-
-        "ATIVIDADE":
-            dataframe["ATIVIDADE"]
-
-    })
-
-
-    # Altura automática
-    altura = (
-        36
-        + (len(tabela) * 28)
+        </table>
+        """
     )
 
-    # Limite
-    altura = max(
-        62,
-        min(
-            altura,
-            300
-        )
+    return "".join(partes)
+
+
+# ============================================================
+# MOSTRAR SETOR
+# ============================================================
+
+def mostrar_setor(nome, dataframe):
+
+    tabela_html = criar_tabela_html(
+        dataframe
     )
 
+    bloco = f"""
+    <div class="bloco-setor">
 
-    st.dataframe(
-        tabela,
-        hide_index=True,
-        use_container_width=True,
-        row_height=26,
-        height=altura,
+        <div class="titulo-setor-tv">
+            {escapar(nome)}
+        </div>
 
-        column_config={
+        {tabela_html}
 
-            "FROTA":
-                st.column_config.TextColumn(
-                    "FROTA",
-                    width="small"
-                ),
+    </div>
+    """
 
-            "MOTIVO":
-                st.column_config.TextColumn(
-                    "MOTIVO",
-                    width="large"
-                ),
-
-            "INÍCIO":
-                st.column_config.TextColumn(
-                    "INÍCIO",
-                    width="medium"
-                ),
-
-            "DURAÇÃO":
-                st.column_config.TextColumn(
-                    "DURAÇÃO",
-                    width="small"
-                ),
-
-            "ATIVIDADE":
-                st.column_config.TextColumn(
-                    "ATIVIDADE",
-                    width="medium"
-                )
-        }
+    st.markdown(
+        bloco,
+        unsafe_allow_html=True
     )
 
 
@@ -762,20 +1117,26 @@ agora = datetime.now(
 # CABEÇALHO
 # ============================================================
 
-st.markdown(
-    f"""
-    <div class="titulo-principal">
+cabecalho = f"""
+<div class="cabecalho-principal">
 
+    <div class="cabecalho-icone">
         🛠️
-
-        CONTROLE DE MANUTENÇÃO - DIVERSOS
-
-        <span class="relogio">
-            {agora.strftime("%d/%m/%Y %H:%M")}
-        </span>
-
     </div>
-    """,
+
+    <div class="cabecalho-titulo">
+        CONTROLE DE MANUTENÇÃO - DIVERSOS
+    </div>
+
+    <div class="cabecalho-relogio">
+        {agora.strftime("%d/%m/%Y %H:%M")}
+    </div>
+
+</div>
+"""
+
+st.markdown(
+    cabecalho,
     unsafe_allow_html=True
 )
 
@@ -838,22 +1199,20 @@ outros = pegar_setor(
 # ============================================================
 # LAYOUT PRINCIPAL
 #
-# Igual à organização da planilha:
-#
 # COLUNA 1
-# Plantio
-# Conservação
-# Preparo de Solo
-# Torta de Filtro
+# - Plantio
+# - Conservação
+# - Preparo de Solo
+# - Torta de Filtro
 #
 # COLUNA 2
-# Herbicida
-# Cultivo
-# Fertirrigação
+# - Herbicida
+# - Cultivo
+# - Fertirrigação
 #
 # COLUNA 3
-# Incêndio
-# Serviços Agrícolas
+# - Incêndio
+# - Serviços Agrícolas
 # ============================================================
 
 coluna1, coluna2, coluna3 = st.columns(
@@ -929,15 +1288,19 @@ with coluna3:
 
 
 # ============================================================
-# OUTROS
+# OUTROS / NÃO CLASSIFICADOS
 #
-# Importante para não esconder registros caso apareça
-# uma frente que ainda não mapeamos.
+# Por enquanto vamos deixar visível.
+# Assim conseguimos identificar frentes que ainda precisam
+# ser adicionadas ao mapeamento.
 # ============================================================
 
 if not outros.empty:
 
-    st.divider()
+    st.markdown(
+        '<div class="separador-outros"></div>',
+        unsafe_allow_html=True
+    )
 
     mostrar_setor(
         "OUTROS / NÃO CLASSIFICADOS",
@@ -951,7 +1314,7 @@ if not outros.empty:
 
 st.markdown(
     f"""
-    <div class="rodape">
+    <div class="rodape-tv">
 
         IFROTA → Supabase
 
@@ -961,7 +1324,7 @@ st.markdown(
 
         &nbsp;&nbsp;|&nbsp;&nbsp;
 
-        Atualizado em
+        Tela atualizada em
         {agora.strftime("%d/%m/%Y %H:%M:%S")}
 
     </div>
@@ -972,6 +1335,8 @@ st.markdown(
 
 # ============================================================
 # AUTO REFRESH
+#
+# Atualiza a página a cada 60 segundos.
 # ============================================================
 
 @st.fragment(
